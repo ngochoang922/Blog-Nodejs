@@ -1,4 +1,3 @@
-const BlogService = require('../services/blog.service');
 
 class BlogController {
     async createPost(req, res) {

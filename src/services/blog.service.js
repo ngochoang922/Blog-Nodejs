@@ -1,4 +1,3 @@
-const Blog = require('../models/blog.model');
 
 class BlogService {
 
