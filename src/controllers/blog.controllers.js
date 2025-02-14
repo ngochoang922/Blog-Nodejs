@@ -1,33 +1,32 @@
+const BlogService = require("../services/blog.service");
+const { SuccessResponse } = require("../core/success.response")
+
 
 class BlogController {
-    async createPost(req, res) {
+    // Tạo bài viết mới
+    static async createPost(req, res) {
+                new SuccessResponse({
+                message: "Sign Up Success",
+                metadata: await BlogService.createPost(req.body)
+            }).send(res)
+    }
+   
+    // 📌 Lấy danh sách bài viết
+    static async getPosts(req, res) {
         try {
-            const post = await BlogService.createPost(req.body);
-            res.status(201).json(post);
+            const { page, limit } = req.query;
+            const result = await BlogService.getPosts({ page, limit });
+            return res.status(200).json(result);
         } catch (error) {
-            res.status(400).json({ error: error.message });
+            return res.status(500).json({ error: error.message });
         }
     }
 
-    // async updatePost(req, res) {
-    //     try {
-    //         const post = await Blog.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-    //         if (!post) return res.status(404).json({ error: 'Post not found' });
-    //         res.json(post);
-    //     } catch (error) {
-    //         res.status(400).json({ error: error.message });
-    //     }
-    // }
+    // Lay post bang id
 
-    // async deletePost(req, res) {
-    //     try {
-    //         const post = await Blog.findByIdAndDelete(req.params.id);
-    //         if (!post) return res.status(404).json({ error: 'Post not found' });
-    //         res.json({ message: 'Post deleted successfully' });
-    //     } catch (error) {
-    //         res.status(500).json({ error: error.message });
-    //     }
-    // }
+    // xoa post = id
+ 
+    // update post bang id
 }
 
-module.exports = new BlogController();
+module.exports = BlogController;
