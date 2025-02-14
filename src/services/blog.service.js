@@ -2,7 +2,7 @@ const slugify = require("slugify");
 const Blog = require("../models/post.model");
 
 class BlogService {
-    // Tạo bài viết mới
+  
     static async createPost(payload) {
         try {
             // Tạo slug tự động nếu không có
@@ -30,7 +30,6 @@ class BlogService {
         }
     }
 
-    // 📌 Lấy danh sách bài viết
     static async getPosts({ page = 1, limit = 10 }) {
         try {
             page = parseInt(page);
@@ -60,5 +59,5 @@ class BlogService {
     }
 }
 
-// Export class BlogService
 module.exports = BlogService;
+
