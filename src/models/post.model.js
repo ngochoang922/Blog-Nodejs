@@ -14,6 +14,7 @@ const postSchema = new Schema({
     post_published_at: { type: Date },
     post_views: { type: Number, default: 0 },
     post_likes: { type: Number, default: 0 },
+    post_user_likes: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
     post_comments_count: { type: Number, default: 0 }
 }, {
     timestamps: true,
