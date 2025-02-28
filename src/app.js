@@ -5,10 +5,15 @@ const router = require('./routers/index')
 const path = require('path');
 
 const path = require('path')
+const cors = require('cors')
 
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+
+app.use(cors({
+    origin: '*'
+}))
 
 // init database
 require('./database/init.mongodb')
