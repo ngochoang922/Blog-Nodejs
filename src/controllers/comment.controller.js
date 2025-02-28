@@ -8,6 +8,20 @@ class CommentController{
             metadata: await CommentService.createComment(req.body)
         }).send(res)
     }
+
+    static getComment = async (req, res, next) => {
+        new SuccessResponse({
+            message: "Get Comment Success",
+            metadata: await CommentService.getCommentByParentId(req.query)
+        }).send(res)
+    }
+
+    static deleteComment = async (req, res, next) => {
+        new SuccessResponse({
+            message: "Delete Comment Success",
+            metadata: await CommentService.deleteComment(req.query)
+        }).send(res)
+    }
 }
 
 module.exports = CommentController

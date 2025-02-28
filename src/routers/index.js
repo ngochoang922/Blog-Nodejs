@@ -7,6 +7,7 @@ const router = express.Router()
 // router.use('/api/acesss', require('./access/index'))
 
 // blog
+router.use('/v1/api/like', require('./like/index'))
 router.use('/v1/api/comment', require('./comment/index'))
 router.use('/v1/api/blog', require('./blog/index'))
 router.use('/v1/api/access', require('./access/index'))
