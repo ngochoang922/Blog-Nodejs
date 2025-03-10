@@ -5,10 +5,10 @@ const { SuccessResponse } = require("../core/success.response")
 class BlogController {
     // Tạo bài viết mới
     static async createPost(req, res) {
-                new SuccessResponse({
-                message: "Sign Up Success",
-                metadata: await BlogService.createPost(req.body)
-            }).send(res)
+        new SuccessResponse({
+            message: "Create Success",
+            metadata: await BlogService.createPost(req.body)
+        }).send(res)
     }
    
     // 📌 Lấy danh sách bài viết

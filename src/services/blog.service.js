@@ -5,22 +5,6 @@ class BlogService {
   
     static async createPost(payload) {
         try {
-            // Tạo slug tự động nếu không có
-            if (!payload.post_slug) {
-                payload.post_slug = slugify(payload.post_title, { lower: true, strict: true });
-            }
-
-            // Kiểm tra xem slug có bị trùng không
-            let newSlug = payload.post_slug;
-            let count = 1;
-            while (await Blog.exists({ post_slug: newSlug })) {
-                newSlug = `${payload.post_slug}-${count}`;
-                count++;
-            }
-
-            // Gán slug cuối cùng
-            payload.post_slug = newSlug;
-
             // Lưu bài viết vào database
             const post = await Blog.create(payload);
             return post;
