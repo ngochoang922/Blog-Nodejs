@@ -1,12 +1,12 @@
 const slugify = require("slugify");
-const Blog = require("../models/post.model");
+const Post = require("../models/post.model");
 const mongoose = require("mongoose");
-class BlogService {
+class PostService {
   
     static async createPost(payload) {
         try {
             // Lưu bài viết vào database
-            const post = await Blog.create(payload);
+            const post = await Post.create(payload);
             return post;
         } catch (error) {
             console.error("Lỗi khi tạo bài viết:", error);
@@ -14,37 +14,33 @@ class BlogService {
         }
     }
 
-    static async getPosts({ page = 1, limit = 10 }) {
+    static async getPosts({ cursor , limit = 10 }) {
         try {
-            page = parseInt(page);
-            limit = parseInt(limit);
-            const skip = (page - 1) * limit;
+            console.log(`Cursor: ${cursor}, Limit: ${limit}`);
+            const query = {}
+            if(cursor){
+                query._id = { $lt: cursor } // $lt: less than
+            }
 
-            // Lấy tổng số bài viết
-            const totalPosts = await Blog.countDocuments();
+            const posts = await Post.find(query)
+            .sort({ createdAt: -1 })
+            .limit(limit)
+            .lean()
 
-            // Lấy danh sách bài viết có phân trang
-            const posts = await Blog.find()
-                .sort({ createdAt: -1 })
-                .skip(skip)
-                .limit(limit)
-                .lean();
+            const nextCursor = posts.length ? posts[posts.length - 1]._id : null;
 
             return {
-                totalPosts,
-                totalPages: Math.ceil(totalPosts / limit),
-                currentPage: page,
-                posts,
-            };
+                data: posts,
+                nextCursor: nextCursor
+            }
         } catch (error) {
-            console.error("Lỗi khi lấy danh sách bài viết:", error);
-            throw new Error("Lỗi khi lấy danh sách bài viết");
+            throw new Error(`Get Post Error:: ${error.message}`);
         }
     }
 
     static async getPostById(id) {
         try {
-            const post = await Blog.findById(id).lean();
+            const post = await Post.findById(id).lean();
             if (!post) {
                 throw new Error("Không tìm thấy bài viết");
             }
@@ -56,7 +52,7 @@ class BlogService {
     }
     static async deletePost(id) {
         try {
-            const post = await Blog.findByIdAndDelete(id);
+            const post = await Post.findByIdAndDelete(id);
             if (!post) {
                 throw new Error("Không tìm thấy bài viết để xóa");
             }
@@ -84,7 +80,7 @@ static async updatePost(id, payload) {
         if (payload.post_slug) {
             let newSlug = payload.post_slug;
             let count = 1;
-            while (await Blog.exists({ post_slug: newSlug, _id: { $ne: id } })) {
+            while (await Post.exists({ post_slug: newSlug, _id: { $ne: id } })) {
                 newSlug = `${payload.post_slug}-${count}`;
                 count++;
             }
@@ -92,7 +88,7 @@ static async updatePost(id, payload) {
         }
 
         // Cập nhật bài viết
-        const post = await Blog.findByIdAndUpdate(id, payload, { 
+        const post = await Post.findByIdAndUpdate(id, payload, { 
             new: true, 
             runValidators: true 
         }).lean();
@@ -110,7 +106,7 @@ static async updatePost(id, payload) {
 }
     static async findPostByTitle(title) {
         try {
-            const post = await Blog.findOne({ post_title: title }).lean();
+            const post = await Post.findOne({ post_title: title }).lean();
             if (!post) {
                 throw new Error("Không tìm thấy bài viết với tiêu đề này");
             }
@@ -122,5 +118,5 @@ static async updatePost(id, payload) {
     }
 
 }
-module.exports = BlogService;
+module.exports = PostService;
 
