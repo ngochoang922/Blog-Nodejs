@@ -6,57 +6,44 @@ class BlogController {
     // Tạo bài viết mới
     static async createPost(req, res) {
                 new SuccessResponse({
-                message: "Sign Up Success",
+                message: "Create Success",
                 metadata: await BlogService.createPost(req.body)
             }).send(res)
     }
    
     // 📌 Lấy danh sách bài viết
     static async getPosts(req, res) {
-        try {
-            const { page, limit } = req.query;
-            const result = await BlogService.getPosts({ page, limit });
-            return res.status(200).json(result);
-        } catch (error) {
-            return res.status(500).json({ error: error.message });
-        }
+        new SuccessResponse({
+            message: "Get Success",
+            metadata: await BlogService.getPosts(req.query)
+        }).send(res)
     }
 
     // Lay post bang id
     static async getPostById(req, res) {
-        try {
-            const { id } = req.params;
-            const result = await BlogService.getPostById(id);
-            return res.status(200).json(result);
-        } catch (error) {
-            return res.status(500).json({ error: error.message });
-        }
+        new SuccessResponse({
+            message: "Get Success",
+            metadata: await BlogService.getPostById(req.params.id)
+        }).send(res)
     }
 
     // xoa post = id
     static async deletePost(req, res) {
-        try {
-            const { id } = req.params;
-            const result = await BlogService.deletePost(id);
-            return res.status(200).json(result);
-        } catch (error) {
-            return res.status(500).json({ error: error.message });
-        }
+        new SuccessResponse({
+            message: "Delette success",
+            metadata: await BlogService.deletePost(req.params.id)
+        }).send(res)
     }
     // update post bang id
     static async updatePost(req, res) {
-        try {
-            const { id } = req.params;
-            const payload = req.body;
-            const result = await BlogService.updatePost(id, req.body);
-            return res.status(200).json(result);
-        } catch (error) {
-            return res.status(500).json({ error: error.message });
-        }
+        new SuccessResponse({
+            message: "Update success",
+            metadata: await BlogService.updatePost(req.params.id, req.body)
+        }).send(res)
     }
     static async findPostByTitle(req, res) {
         try {
-            console.log("Dữ liệu nhận từ body:", req.body); // Kiểm tra dữ liệu body gửi lên
+            console.log("Dữ liệu nhận từ body:", req.body);
             const { title } = req.body;
     
             if (!title) {
@@ -69,8 +56,6 @@ class BlogController {
             return res.status(500).json({ error: error.message });
         }
     }
-    
-
 }
 
 module.exports = BlogController;
