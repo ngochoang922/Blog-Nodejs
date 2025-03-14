@@ -1,13 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const PostController = require('../../controllers/post.controllers')
+const asyncHandler = require('../../helpers/asyncHandler')
 
-router.get('', PostController.getPosts);
-router.post('', PostController.createPost)
-router.get('/:id', PostController.getPostById)
-router.delete('/', PostController.deletePost)
-router.put('/:id', PostController.updatePost)
-router.post('/find', PostController.findPostByTitle);
+router.get('',  asyncHandler(PostController.getPosts))
+router.post('', asyncHandler(PostController.createPost))
+router.get('/:id',  asyncHandler(PostController.getPostById))
+router.delete('/',  asyncHandler(PostController.deletePost))
+router.put('/:id',  asyncHandler(PostController.updatePost))
+router.post('/find',  asyncHandler(PostController.findPostByTitle))
 
 module.exports = router
 

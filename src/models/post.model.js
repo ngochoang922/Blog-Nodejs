@@ -4,10 +4,7 @@ const COLLECTION_NAME = "posts";
 
 const postSchema = new Schema({
     post_author_id: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    post_title: { type: String, required: true },
     post_content: { type: String, required: true },
-    post_excerpt: { type: String }, // tom tat
-    post_categories: [{ type: Schema.Types.ObjectId, ref: "Category" }],
     post_cover_image: { type: String },
     post_views: { type: Number, default: 0 },
     post_likes: { type: Number, default: 0 },

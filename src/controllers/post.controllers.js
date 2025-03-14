@@ -13,13 +13,11 @@ class PostController {
    
     // 📌 Lấy danh sách bài viết
     static async getPosts(req, res) {
-        try {
-            const { cursor, limit } = req.query;
-            const result = await PostService.getPosts({ cursor, limit });
-            return res.status(200).json(result);
-        } catch (error) {
-            return res.status(500).json({ error: error.message });
-        }
+        const { cursor, limit } = req.query;
+        new SuccessResponse({
+            message: "Get All Post Success",
+            metadata: await PostService.getPosts({ cursor, limit })
+        }).send(res)
     }
 
     // Lay post bang id
