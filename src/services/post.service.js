@@ -41,22 +41,18 @@ class PostService {
     static async getPostById(id) {
         try {
             const post = await Post.findById(id).lean();
-            if (!post) {
-                throw new Error("Không tìm thấy bài viết");
-            }
             return post;
         } catch (error) {
-            console.error("Lỗi khi lấy bài viết:", error);
-            throw new Error("Lỗi khi lấy bài viết");
+            throw new Error("Post not found");
         }
     }
     static async deletePost(id) {
         try {
+            console.log(`Delete post with id: ${id}`);
             const post = await Post.findByIdAndDelete(id);
             if (!post) {
                 throw new Error("Không tìm thấy bài viết để xóa");
             }
-            return post;
         } catch (error) {
             console.error("Lỗi khi xóa bài viết:", error);
             throw new Error("Lỗi khi xóa bài viết");

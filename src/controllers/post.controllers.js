@@ -24,24 +24,19 @@ class PostController {
 
     // Lay post bang id
     static async getPostById(req, res) {
-        try {
-            const { id } = req.params;
-            const result = await PostService.getPostById(id);
-            return res.status(200).json(result);
-        } catch (error) {
-            return res.status(500).json({ error: error.message });
-        }
+        const { id } = req.params;
+        new SuccessResponse({
+            message: "Get Post By Id Success",
+            metadata: await PostService.getPostById(id)
+        }).send(res)
     }
 
     // xoa post = id
     static async deletePost(req, res) {
-        try {
-            const { id } = req.params;
-            const result = await PostService.deletePost(id);
-            return res.status(200).json(result);
-        } catch (error) {
-            return res.status(500).json({ error: error.message });
-        }
+        new SuccessResponse({
+            message: "Delete Success",
+            metadata: await PostService.deletePost(req.query.id)
+        }).send(res)
     }
     // update post bang id
     static async updatePost(req, res) {
