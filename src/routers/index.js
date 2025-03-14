@@ -9,7 +9,7 @@ const router = express.Router()
 // blog
 router.use('/v1/api/like', require('./like/index'))
 router.use('/v1/api/comment', require('./comment/index'))
-router.use('/v1/api/blog', require('./blog/index'))
+router.use('/v1/api/post', require('./post/index'))
 router.use('/v1/api/access', require('./access/index'))
 
 module.exports = router
