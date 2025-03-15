@@ -119,17 +119,19 @@ class PostService {
       throw new Error(error.message || "Lỗi khi cập nhật bài viết");
     }
   }
-  static async findPostByTitle(title) {
+  static async searchPost({ keyword }) {
+    console.log(`Search post with keyword: ${keyword}`);
     try {
-      const post = await Post.findOne({ post_title: title }).lean();
-      if (!post) {
-        throw new Error("Không tìm thấy bài viết với tiêu đề này");
-      }
-      return post;
+      const post = await Post.find(
+        { post_content: { $regex: keyword, $options: "i" } }
+      )
+      .sort({ createdAt: -1 })
+      .lean()
+
+      return post
     } catch (error) {
-      console.error("Lỗi khi tìm bài viết theo tiêu đề:", error);
-      throw new Error("Lỗi khi tìm bài viết theo tiêu đề");
+      console.error("Lỗi khi tìm bài viết theo tiêu đề:", error)
     }
   }
 }
-module.exports = PostService;
+module.exports = PostService

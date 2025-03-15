@@ -8,7 +8,7 @@ router.post('', asyncHandler(PostController.createPost))
 router.get('/:id',  asyncHandler(PostController.getPostById))
 router.delete('/',  asyncHandler(PostController.deletePost))
 router.put('/:id',  asyncHandler(PostController.updatePost))
-router.post('/find',  asyncHandler(PostController.findPostByTitle))
+router.get('/search/:keyword',  asyncHandler(PostController.searchPost))
 
 module.exports = router
 

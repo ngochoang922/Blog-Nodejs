@@ -19,9 +19,10 @@ class LikeService {
         const foundUser = await User.findOne({ _id: userId })
         if(!foundUser) throw new BadRequestError('User not found')
 
-        let updatePost
+        let isLiked = false
         if(!foundPost.post_user_likes.includes(userId)){
-            updatePost = await Post.findOneAndUpdate(
+            isLiked = true
+            await Post.findOneAndUpdate(
                 { _id: postId },
                 { 
                     $push: { post_user_likes: userId },
@@ -30,7 +31,7 @@ class LikeService {
                 { new: true }
             )
         }else{
-            updatePost = await Post.findOneAndUpdate(
+            await Post.findOneAndUpdate(
                 { _id: postId },
                 { 
                     $pull: { post_user_likes: userId },
@@ -40,7 +41,7 @@ class LikeService {
             )
         }
 
-        return updatePost
+        return isLiked
     }
 }
 

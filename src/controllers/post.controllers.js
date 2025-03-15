@@ -47,23 +47,13 @@ class PostController {
             return res.status(500).json({ error: error.message });
         }
     }
-    static async findPostByTitle(req, res) {
-        try {
-            console.log("Dữ liệu nhận từ body:", req.body); // Kiểm tra dữ liệu body gửi lên
-            const { title } = req.body;
-    
-            if (!title) {
-                return res.status(400).json({ error: "Thiếu tiêu đề bài viết" });
-            }
-    
-            const result = await PostService.findPostByTitle(title);
-            return res.status(200).json(result);
-        } catch (error) {
-            return res.status(500).json({ error: error.message });
-        }
-    }
-    
 
+    static async searchPost(req, res) {
+        new SuccessResponse({
+            message: "Search Post Success",
+            metadata: await PostService.searchPost(req.params)
+        }).send(res)
+    }
 }
 
 module.exports = PostController;
