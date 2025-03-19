@@ -5,7 +5,7 @@ class LikePostController{
     static togglelikePost = async (req, res, next) => {
         new SuccessResponse({
             message: "Like Post Success",
-            metadata: await LikeService.togglelikePost(req.query)
+            metadata: await LikeService.togglelikePost(req.body)
         }).send(res)
     }
 

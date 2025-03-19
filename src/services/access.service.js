@@ -7,7 +7,8 @@ const UserService = require('./user.service')
 const AuthUtil = require('../auth/auth.util')
 
 class AccessService{
-    static signUp = async ({username, email, password}) => {
+    static signUp = async (payload) => {
+        const { email, password } = payload
         const existsUser = await UserModel.findOne({
             email: email},
             "email"
@@ -20,9 +21,7 @@ class AccessService{
         const passwordHash = await bycrypt.hash(password, 10)
 
         const newUser = await UserModel.create({
-            username: username,
-            email: email,
-            password: passwordHash,
+            ...payload, password:passwordHash
         })
 
         return newUser

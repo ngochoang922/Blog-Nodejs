@@ -1,20 +1,21 @@
-const { BadRequestError } = require("../core/error.response");
+const { BadRequestError, NotFoundError } = require("../core/error.response");
 const Comment = require("../models/comment.model");
 const Post = require("../models/post.model");
 const User = require("../models/user.model");
+const { ObjectId } = require('mongoose');
 
 class CommentService {
   static async createComment({ postId, userId, content, commentParentId }) {
     // check postid exist
     const foundPost = await Post.findOne({ _id: postId });
-    if (!foundPost) throw new Error("Post not found");
+    if (!foundPost) throw new NotFoundError("Post not found");
 
     // check userId exist
-    const foundUser = await User.findOne({ _id: userId });
-    if (!foundUser) throw new Error("User not found");
+    const foundUser = await User.findOne({ _id: userId });  
+    if (!foundUser) throw new NotFoundError("User not found");
 
     if (content === "" || content.length == 0)
-      throw new Error("Content is empty");
+      throw new NotFoundError("Content is empty");
 
     // create Comment
     const comment = await Comment.create({
@@ -27,7 +28,7 @@ class CommentService {
     let rightValue;
     if (commentParentId) {
       const commentParent = await Comment.findOne({ _id: commentParentId });
-      if (!commentParent) throw new Error("Comment parent not found");
+      if (!commentParent) throw new NotFoundError("Comment parent not found");
 
       rightValue = commentParent.comment_right;
 
@@ -74,10 +75,10 @@ class CommentService {
 
   static async deleteComment({ postId, commentId }) {
     const foundPost = await Post.findOne({ _id: postId });
-    if (!foundPost) throw new BadRequestError("Post not found");
+    if (!foundPost) throw new NotFoundError("Post not found");
 
     const foundComment = await Comment.findOne({ _id: commentId });
-    if (!foundComment) throw new BadRequestError("Comment not found");
+    if (!foundComment) throw new NotFoundError("Comment not found");
 
     const { comment_left, comment_right } = foundComment;
 
@@ -118,7 +119,7 @@ class CommentService {
   }) {
     if(commentParentId){
         const parent = await Comment.findOne({ _id: commentParentId })
-        if(!parent) throw new BadRequestError('Comment not found')
+        if(!parent) throw new NotFoundError('Comment not found')
 
         const comment = await Comment.find({
             comment_post_id: postId,
@@ -131,6 +132,7 @@ class CommentService {
           comment_content: 1,
           comment_parent_id: 1
         })
+        .populate("comment_user_id", "fullname profile.avatar")
         .sort({ comment_left: 1})
         .limit(limit)
         .skip(skip)
@@ -139,14 +141,16 @@ class CommentService {
     }else{
       const comment = await Comment.find({
         comment_post_id: postId,
-        comment_parent_id: commentParentId
+        comment_parent_id: null
       })
       .select({
         comment_left: 1,
         comment_right: 1,
         comment_content: 1,
-        comment_parent_id: 1
+        comment_parent_id: 1,
+        comment_user_id: 1
       })
+      .populate("comment_user_id", "fullname profile.avatar")
       .sort({ comment_left: 1})
       .limit(limit)
       .skip(skip)

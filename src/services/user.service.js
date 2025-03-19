@@ -5,6 +5,11 @@ class UserService {
         const user = await UserModel.findOne({ email })
         return user
     }
+
+    static findById = async (id) => {
+        const user = await UserModel.findById(id)
+        return user
+    }
 }
 
 module.exports = UserService

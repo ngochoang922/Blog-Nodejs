@@ -3,13 +3,11 @@ const DOCUMENT_NAME = "User";
 const COLLECTION_NAME = "users";
 
 const userSchema = new Schema({
-    username: { type: String, required: true },
+    fullname: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, enum: ["admin", "editor", "user"], default: "user" },
     profile: {
-        first_name: { type: String },
-        last_name: { type: String },
         avatar: { type: String },
         bio: { type: String },
         social_links: {
