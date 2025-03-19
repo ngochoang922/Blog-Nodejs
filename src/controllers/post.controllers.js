@@ -9,7 +9,6 @@ class PostController {
                 message: "Create Success",
                 metadata: await BlogService.createPost(req.body)
             }).send(res)
-
         new SuccessResponse({
             message: "Create Success",
             metadata: await PostService.createPost(req.body)

@@ -3,16 +3,19 @@ const Post = require("../models/post.model");
 const mongoose = require("mongoose");
 class PostService {
   
-    static async createPost(payload) {
+    static async createPost(postData) {
         try {
-            // Lưu bài viết vào database
-            const post = await Post.create(payload);
-            return post;
+            if (!postData.post_slug) {
+                postData.post_slug = generateSlug(postData.title); // Tạo slug từ tiêu đề
+            }
+    
+            const newPost = await Post.create(postData);
+            return newPost;
         } catch (error) {
-            console.error("Lỗi khi tạo bài viết:", error);
             throw new Error(error.message || "Lỗi không xác định khi tạo bài viết");
         }
-    }
+    };
+    
 
     static async getPosts({ cursor , limit = 10 }) {
         try {
